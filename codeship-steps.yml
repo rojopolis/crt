@@ -1,0 +1,4 @@
+- service: python2.7
+  name: publish
+  tag: ^\d*\.\d*\.\d*$
+  command: /bin/bash -c 'pip install twine wheel; python setup.py sdist bdist_wheel; twine upload dist/*'
