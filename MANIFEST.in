@@ -1,2 +1,3 @@
 include versioneer.py
 include crt/_version.py
+include requirements.txt
