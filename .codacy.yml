@@ -1,0 +1,4 @@
+exclude_paths:
+  - '**/_version.py'
+  - 'versioneer.py'
+  

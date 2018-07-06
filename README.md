@@ -5,3 +5,5 @@ Cloud Render Toolkit
 
 
 [![codecov](https://codecov.io/gh/rojopolis/crt/branch/master/graph/badge.svg)](https://codecov.io/gh/rojopolis/crt/branch/master/graph/badge.svg)
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fbfe754c63714246aabfe6d06cf7d841)](https://www.codacy.com/app/rojopolis/crt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rojopolis/crt&amp;utm_campaign=Badge_Grade)
