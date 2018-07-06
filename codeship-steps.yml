@@ -1,3 +1,16 @@
+- type: parallel
+  name: Run Tests
+  steps:
+  - service: python2.7
+    name: test Python 2.7
+    command: /bin/bash -c 'pip install -r requirements-test.txt .; pytest'
+  - service: python3.6
+    name: test Python3.6
+    command: /bin/bash -c 'pip install -r requirements-test.txt .; pytest'
+- service: python2.7
+  name: Coverage Report
+  command: /bin/bash -c 'pip install -r requirements-test.txt .; codecov'
+  
 - service: python2.7
   name: publish
   tag: ^\d*\.\d*\.\d*$

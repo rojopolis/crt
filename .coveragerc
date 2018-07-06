@@ -1,0 +1,3 @@
+[run]
+source = crt
+omit = crt/_version.py
