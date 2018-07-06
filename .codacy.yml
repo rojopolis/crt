@@ -1,4 +1,4 @@
+---
 exclude_paths:
-  - '**/_version.py'
+  - 'crt/_version.py'
   - 'versioneer.py'
-  
