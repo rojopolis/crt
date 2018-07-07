@@ -18,7 +18,6 @@ class ComputeInstance(object):
         pass
 
     # Context manager interface
-        # Context manager interface
     def __enter__(self):
         return self
 

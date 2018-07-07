@@ -24,7 +24,6 @@ class GCEComputeInstance(ComputeInstance):
         self.zone = zone
 
         self._gce = googleapiclient.discovery.build('compute', 'v1')
-        self._refresh_state()
 
     def _refresh_state(self):
         '''

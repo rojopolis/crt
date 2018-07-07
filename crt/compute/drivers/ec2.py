@@ -21,7 +21,6 @@ class EC2ComputeInstance(ComputeInstance):
         self.region = region
 
         self._ec2 = boto3.client('ec2', region_name=region)
-        self._refresh_state()
 
     def _refresh_state(self):
         '''
