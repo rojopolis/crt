@@ -1,7 +1,7 @@
 '''
 GCE Compute Driver
 '''
-from compute_instance import ComputeInstance
+from .compute_instance import ComputeInstance
 import googleapiclient.discovery
 from googleapiclient.errors import HttpError
 import logging

@@ -1,7 +1,7 @@
 '''
 EC2 Compute Driver
 '''
-from compute_instance import ComputeInstance
+from .compute_instance import ComputeInstance
 import boto3
 from botocore.exceptions import ClientError
 import logging
