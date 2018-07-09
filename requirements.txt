@@ -2,3 +2,4 @@ azure==3.0.0
 boto3==1.7.52
 click==6.7
 google-api-python-client==1.7.3
+jsonnet==0.10.0
