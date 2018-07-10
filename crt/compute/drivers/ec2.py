@@ -3,7 +3,6 @@ EC2 Compute Driver
 '''
 from .compute_instance import ComputeInstance
 import boto3
-from botocore.exceptions import ClientError
 import logging
 
 logger = logging.getLogger(__name__)
@@ -28,9 +27,9 @@ class EC2ComputeInstance(ComputeInstance):
         '''
         try:
             self._state = self._ec2.describe_instances(InstanceIds=[self.id])
-        except ClientError as exc:
-            self._state = None
-            logger.debug('Failed to fetch state', exc_info=exc)
+        except Exception as exc:
+            self._state = {}
+            logger.warn('Failed to fetch state', exc_info=exc)
 
     # Public interface
     @classmethod
@@ -63,8 +62,3 @@ class EC2ComputeInstance(ComputeInstance):
         Stop instance
         '''
         self._ec2.stop_instances(InstanceIds=[self.id])
-
-    @property
-    def state(self):
-        self._refresh_state()
-        return self._state

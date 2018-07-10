@@ -3,7 +3,6 @@ GCE Compute Driver
 '''
 from .compute_instance import ComputeInstance
 import googleapiclient.discovery
-from googleapiclient.errors import HttpError
 import logging
 
 logger = logging.getLogger(__name__)
@@ -36,9 +35,9 @@ class GCEComputeInstance(ComputeInstance):
             )
         try:
             self._state = request.execute()
-        except HttpError as exc:
-            self._state = None
-            logger.debug('Failed to fetch state', exc_info=exc)
+        except Exception as exc:
+            self._state = {}
+            logger.warn('Failed to fetch state', exc_info=exc)
 
     # Public interface
     @classmethod
@@ -95,8 +94,3 @@ class GCEComputeInstance(ComputeInstance):
             instance=self.id
         )
         request.execute()
-
-    @property
-    def state(self):
-        self._refresh_state()
-        return self._state
