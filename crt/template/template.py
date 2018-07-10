@@ -57,6 +57,9 @@ class Template(object):
         return os.environ.get(var)
 
     # Dict interface
+    def iteritems(self):
+        return self.__dict__.iteritems()
+
     def __setitem__(self, key, item):
         self.__dict__[key] = item
 

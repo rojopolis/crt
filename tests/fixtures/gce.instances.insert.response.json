@@ -1,14 +1,14 @@
 {
     "canIpForward":false,
     "cpuPlatform":"Intel Broadwell",
-    "creationTimestamp":"2018-07-09T16:50:37.550-07:00",
+    "creationTimestamp":"2018-07-09T19:46:45.556-07:00",
     "deletionProtection":false,
     "description":"",
     "disks":[
        {
           "autoDelete":true,
           "boot":true,
-          "deviceName":"test-instance",
+          "deviceName":"test-instance-2",
           "guestOsFeatures":[
              {
                 "type":"VIRTIO_SCSI_MULTIQUEUE"
@@ -21,11 +21,11 @@
              "projects/debian-cloud/global/licenses/debian-9-stretch"
           ],
           "mode":"READ_WRITE",
-          "source":"projects/dev-000001/zones/us-west1-b/disks/test-instance",
+          "source":"projects/dev-000001/zones/us-west1-b/disks/test-instance-2",
           "type":"PERSISTENT"
        }
     ],
-    "id":"3333001564333689379",
+    "id":"8465201335152255227",
     "kind":"compute#instance",
     "labelFingerprint":"42WmSpB8rSM=",
     "machineType":"projects/dev-000001/zones/us-west1-b/machineTypes/f1-micro",
@@ -33,8 +33,25 @@
        "fingerprint":"hxxkUctr2Vo=",
        "kind":"compute#metadata"
     },
-    "name":"test-instance",
+    "name":"test-instance-2",
     "networkInterfaces":[
+       {
+          "accessConfigs":[
+             {
+                "kind":"compute#accessConfig",
+                "name":"External NAT",
+                "natIP":"35.233.141.32",
+                "networkTier":"PREMIUM",
+                "type":"ONE_TO_ONE_NAT"
+             }
+          ],
+          "fingerprint":"w422xfXUcR0=",
+          "kind":"compute#networkInterface",
+          "name":"nic0",
+          "network":"projects/dev-000001/global/networks/default",
+          "networkIP":"10.138.0.3",
+          "subnetwork":"projects/dev-000001/regions/us-west1/subnetworks/default"
+       },
        {
           "accessConfigs":[
              {
@@ -45,20 +62,20 @@
                 "type":"ONE_TO_ONE_NAT"
              }
           ],
-          "fingerprint":"Eo67QZhDDRQ=",
+          "fingerprint":"w0_fC_u3xSk=",
           "kind":"compute#networkInterface",
-          "name":"nic0",
-          "network":"projects/dev-000001/global/networks/default",
-          "networkIP":"10.138.0.2",
-          "subnetwork":"projects/dev-000001/regions/us-west1/subnetworks/default"
+          "name":"nic1",
+          "network":"projects/dev-000001/global/networks/test",
+          "networkIP":"10.217.22.2",
+          "subnetwork":"projects/dev-000001/regions/us-west1/subnetworks/test"
        }
     ],
     "scheduling":{
-       "automaticRestart":false,
-       "onHostMaintenance":"TERMINATE",
-       "preemptible":true
+       "automaticRestart":true,
+       "onHostMaintenance":"MIGRATE",
+       "preemptible":false
     },
-    "selfLink":"projects/dev-000001/zones/us-west1-b/instances/test-instance",
+    "selfLink":"projects/dev-000001/zones/us-west1-b/instances/test-instance-2",
     "serviceAccounts":[
        {
           "email":"346094894750-compute@developer.gserviceaccount.com",

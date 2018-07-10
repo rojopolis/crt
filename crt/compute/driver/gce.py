@@ -1,9 +1,9 @@
 '''
 GCE Compute Driver
 '''
-from .compute_instance import ComputeInstance
+from .instance import ComputeInstance
 import googleapiclient.discovery
-from googleapiclient.errors import HttpError
+import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,6 +15,8 @@ class GCEComputeInstance(ComputeInstance):
     Represents a Compute Instance on Google Compute Engine
     https://cloud.google.com/compute/docs/reference/rest/v1/instances
     '''
+    provider = 'gce'
+
     def __init__(self, iid, project, zone):
         '''
         Initialize the provider library and fetch instance.
@@ -36,23 +38,24 @@ class GCEComputeInstance(ComputeInstance):
             )
         try:
             self._state = request.execute()
-        except HttpError as exc:
+            self._last_refresh = datetime.datetime.now()
+        except Exception as exc:
             self._state = None
             logger.debug('Failed to fetch state', exc_info=exc)
 
     # Public interface
     @classmethod
-    def create(cls, spec):
+    def create(cls, template):
         '''
         Create instance on provider
         https://cloud.google.com/compute/docs/reference/rest/v1/instances/insert
         '''
         gce = googleapiclient.discovery.build('compute', 'v1')
-        body = spec.copy()
+        body = template.copy().get('compute').get('instance')
         iid = body.get('name')
         project = body.pop('project', None)
         zone = body.pop('zone', None)
-        template = body.pop('template', None)
+        template = body.pop('sourceInstanceTemplate', None)
         request = gce.instances().insert(
             project=project,
             zone=zone,
@@ -97,6 +100,27 @@ class GCEComputeInstance(ComputeInstance):
         request.execute()
 
     @property
-    def state(self):
+    def ready(self):
+        '''
+        True if the instance is booted and ready to accept work
+        Note:  This method forces the state to refresh... it should be called
+               sparingly.
+        '''
         self._refresh_state()
-        return self._state
+        status = self.state.get('status')
+        return status == 'RUNNING'
+
+    @property
+    def addresses(self):
+        '''
+        Dict of public and private ip addresses
+        {'public': [],
+         'private': []}
+        '''
+        public = [[y.get('natIP') for y in x['accessConfigs']][0]
+                  for x in self.state['networkInterfaces']]
+
+        private = [x['networkIP'] for x in self.state['networkInterfaces']]
+
+        return {'private': private,
+                'public': public}

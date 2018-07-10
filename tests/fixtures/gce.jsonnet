@@ -1,6 +1,8 @@
-local project_id = 'dev-000001';
+local project = 'dev-000001';
 local zone = 'us-central1-b';
-local machine_type = 'f1-micro';
+local name = 'pooper';
+local machine_type = 'projects/' + project + '/zones/' + zone + '/machineTypes/f1-micro';
+local image = 'global/images/family/rancheros';
 {
     compute: {
         provider: 'gce',
@@ -8,30 +10,32 @@ local machine_type = 'f1-micro';
             service_account_file: '/path/to/credential.json'
         },
         instance: {
-            machine_type: 'zones/' + zone + '/machineTypes/' + machine_type,
-            name: 'pooty',
+            project: project,
+            zone: zone,
+            sourceInstanceTemplate: null,
+            machineType: machine_type,
+            name: name,
+            description: name,
+            canIpForward: false,
             networkInterfaces: [
                 {
-                    network: 'global/networks/default',
-                    access_configs: [
-                        {
-                            type: 'ONE_TO_ONE_NAT',
-                            name: 'NAT'
-                        }
-                    ]
+                    network: 'global/networks/default'
                 }
             ],
-            disks: [
+            disks:[
                 {
+                    initializeParams: {
+                        sourceImage: image,
+                        diskSizeGb: "10",
+                        diskType: 'zones/us-central1-b/diskTypes/pd-standard'
+                    },
                     boot: true,
-                    initialize_params: {
-                        sourceImage: 'projects/debian-cloud/global/images/family/debian-9',
-                        disk_size_gb: 10,
-                        disk_type: 'projects/' + project_id + '/zones/us-central1-b/diskTypes/pd-standard'
-                },
-                auto_delete: true
+                    autoDelete: true,
                 }
             ]
         },
+    },
+    container: {
+        provider: 'docker'
     },
 }
