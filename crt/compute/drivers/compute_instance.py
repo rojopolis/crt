@@ -26,7 +26,7 @@ class ComputeInstance(object):
 
     # Public interface
     @classmethod
-    def create(cls):
+    def create(cls, spec):
         '''
         Create instance on provider
         '''

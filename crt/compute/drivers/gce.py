@@ -15,11 +15,11 @@ class GCEComputeInstance(ComputeInstance):
     Represents a Compute Instance on Google Compute Engine
     https://cloud.google.com/compute/docs/reference/rest/v1/instances
     '''
-    def __init__(self, id, project, zone):
+    def __init__(self, iid, project, zone):
         '''
         Initialize the provider library and fetch instance.
         '''
-        self.id = id
+        self.id = iid
         self.project = project
         self.zone = zone
 
@@ -42,16 +42,17 @@ class GCEComputeInstance(ComputeInstance):
 
     # Public interface
     @classmethod
-    def create(cls, name, project, zone, template=None, spec=None):
+    def create(cls, spec):
         '''
         Create instance on provider
         https://cloud.google.com/compute/docs/reference/rest/v1/instances/insert
         '''
         gce = googleapiclient.discovery.build('compute', 'v1')
-        body = {}
-        if spec is not None:
-            body.update(spec)
-        body['name'] = name
+        body = spec.copy()
+        iid = body.get('name')
+        project = body.pop('project', None)
+        zone = body.pop('zone', None)
+        template = body.pop('template', None)
         request = gce.instances().insert(
             project=project,
             zone=zone,
@@ -60,7 +61,7 @@ class GCEComputeInstance(ComputeInstance):
         )
         op = request.execute()
         logger.debug(op)
-        return cls(name, project, zone)
+        return cls(iid, project, zone)
 
     def delete(self):
         '''

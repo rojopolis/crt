@@ -13,11 +13,11 @@ class EC2ComputeInstance(ComputeInstance):
     '''
     Represents a Compute instance on AWS EC2
     '''
-    def __init__(self, id, region):
+    def __init__(self, iid, region):
         '''
         Initialize the provider library and fetch instance.
         '''
-        self.id = id
+        self.id = iid
         self.region = region
 
         self._ec2 = boto3.client('ec2', region_name=region)
@@ -34,17 +34,14 @@ class EC2ComputeInstance(ComputeInstance):
 
     # Public interface
     @classmethod
-    def create(cls, name, region, template=None, spec=None):
+    def create(cls, spec):
         '''
         Create instance on EC2
+        name, region, template=None, spec=None
         '''
+        region = spec.pop('region')
         ec2 = boto3.client('ec2', region_name=region)
-        args = {}
-        if spec is not None:
-            args.update(spec)
-        if template is not None:
-            args['LaunchTemplate'] = template
-        response = ec2.run_instances(MinCount=1, MaxCount=1, **args)
+        response = ec2.run_instances(MinCount=1, MaxCount=1, **spec)
         logger.debug(response)
         iid = response['Instances'][0]['InstanceId']
         return cls(iid, region)
