@@ -1,5 +1,5 @@
-from . import drivers
+from .driver.instance import create_instance
 
 __all__ = [
-    'drivers'
+    'create_instance'
 ]

@@ -6,10 +6,10 @@ from crt.template import Template
 def test_native():
     os.environ['__JSONNET_TEST'] = '123456789'
     snippet = '''
-    local env = std.native('env');
+    local env = std.native('getenv')();
     local uuidgen = std.native('uuidgen');
     {
-        env_test: env('__JSONNET_TEST'),
+        env_test: env.__JSONNET_TEST,
         uuid_test: uuidgen()
     }
     '''

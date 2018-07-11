@@ -2,6 +2,8 @@ import os
 import uuid
 import json
 import logging
+
+import lycanthropy
 import _jsonnet
 
 logger = logging.getLogger(__name__)
@@ -27,8 +29,10 @@ class Template(object):
         # The native_callbacks dict makes these functions available
         # from within the template.  They are called like this:
         #    std.native('env')('PATH')
-        self.native_callbacks = {'uuidgen': ((), self.uuidgen),
-                                 'env': (('var',), self.env)}
+        self.native_callbacks = {
+            'uuidgen': ((), self.uuidgen),
+            'getenv': ((), self.getenv),
+        }
         self.__dict__ = self._eval()
 
     def _eval(self):
@@ -42,6 +46,24 @@ class Template(object):
         )
         return json.loads(data)
 
+    def to_camel(self):
+        '''
+        Return copy of rendered dict with all keys converted to camelCase
+        '''
+        return lycanthropy.morph_dict(
+            self.__dict__,
+            lycanthropy.snake_to_camel
+        )
+
+    def to_pascal(self):
+        '''
+        Return copy of rendered dict with all keys converted to PascalCase
+        '''
+        return lycanthropy.morph_dict(
+            self.__dict__,
+            lycanthropy.snake_to_pascal
+        )
+
     @staticmethod
     def uuidgen():
         '''
@@ -50,13 +72,16 @@ class Template(object):
         return str(uuid.uuid4())
 
     @staticmethod
-    def env(var):
+    def getenv():
         '''
         Make environment varibales available in templates.
         '''
-        return os.environ.get(var)
+        return dict(os.environ)
 
     # Dict interface
+    def iteritems(self):
+        return self.__dict__.iteritems()
+
     def __setitem__(self, key, item):
         self.__dict__[key] = item
 
