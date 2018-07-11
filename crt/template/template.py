@@ -29,8 +29,10 @@ class Template(object):
         # The native_callbacks dict makes these functions available
         # from within the template.  They are called like this:
         #    std.native('env')('PATH')
-        self.native_callbacks = {'uuidgen': ((), self.uuidgen),
-                                 'env': (('var',), self.env)}
+        self.native_callbacks = {
+            'uuidgen': ((), self.uuidgen),
+            'getenv': ((), self.getenv),
+        }
         self.__dict__ = self._eval()
 
     def _eval(self):
@@ -70,13 +72,11 @@ class Template(object):
         return str(uuid.uuid4())
 
     @staticmethod
-    def env(var):
+    def getenv():
         '''
         Make environment varibales available in templates.
         '''
-        if var is not None:
-            return os.environ.get(var)
-        return os.environ
+        return dict(os.environ)
 
     # Dict interface
     def iteritems(self):
