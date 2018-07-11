@@ -46,7 +46,7 @@ class EC2ComputeInstance(ComputeInstance):
         '''
         Create instance on EC2
         '''
-        body = template.copy().get('compute').get('instance')
+        body = template.to_pascal()['compute']['instance']
         region = body.pop('region')
         ec2 = boto3.client('ec2', region_name=region)
         response = ec2.run_instances(**body)

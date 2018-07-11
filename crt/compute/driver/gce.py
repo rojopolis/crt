@@ -51,7 +51,7 @@ class GCEComputeInstance(ComputeInstance):
         https://cloud.google.com/compute/docs/reference/rest/v1/instances/insert
         '''
         gce = googleapiclient.discovery.build('compute', 'v1')
-        body = template.copy().get('compute').get('instance')
+        body = template.to_camel()['compute']['instance']
         iid = body.get('name')
         project = body.pop('project', None)
         zone = body.pop('zone', None)

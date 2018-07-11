@@ -12,25 +12,25 @@ local image = 'global/images/family/rancheros';
         instance: {
             project: project,
             zone: zone,
-            sourceInstanceTemplate: null,
-            machineType: machine_type,
+            source_instance_template: null,
+            machine_type: machine_type,
             name: name,
             description: name,
-            canIpForward: false,
-            networkInterfaces: [
+            can_ip_forward: false,
+            network_interfaces: [
                 {
                     network: 'global/networks/default'
                 }
             ],
             disks:[
                 {
-                    initializeParams: {
-                        sourceImage: image,
-                        diskSizeGb: "10",
-                        diskType: 'zones/us-central1-b/diskTypes/pd-standard'
+                    initialize_Params: {
+                        source_image: image,
+                        disk_size_gb: "10",
+                        disk_type: 'zones/us-central1-b/diskTypes/pd-standard'
                     },
                     boot: true,
-                    autoDelete: true,
+                    auto_delete: true,
                 }
             ]
         },

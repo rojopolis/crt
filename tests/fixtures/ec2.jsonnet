@@ -9,9 +9,9 @@ local image_id = 'ami-1e63797e';
         },
         instance: {
             region: 'us-west-1',
-            ImageId: image_id,
-            MinCount: 1,
-            MaxCount: 1,
+            image_id: image_id,
+            min_count: 1,
+            max_count: 1,
         },
     },
 }
