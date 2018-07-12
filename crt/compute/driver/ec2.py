@@ -45,7 +45,7 @@ class EC2ComputeInstance(ComputeInstance):
     @classmethod
     def create(cls, template, client=None):
         '''
-        Create instance on EC2
+        Create instance on EC2.
         '''
         body = template.to_pascal()['compute']['instance']
         region = body.pop('region')

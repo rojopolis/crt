@@ -50,7 +50,7 @@ class GCEComputeInstance(ComputeInstance):
     @classmethod
     def create(cls, template, client=None):
         '''
-        Create instance on provider
+        Create instance on GCE
         https://cloud.google.com/compute/docs/reference/rest/v1/instances/insert
         '''
         if client is None:
