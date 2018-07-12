@@ -15,3 +15,12 @@ python3.6:
   working_dir: /src
   encrypted_env_file: secrets.encrypted
   cached: true
+
+python3.7:
+  image: python:3.7
+  volumes:
+    - .:/src
+    - ./build:/artifacts
+  working_dir: /src
+  encrypted_env_file: secrets.encrypted
+  cached: true
