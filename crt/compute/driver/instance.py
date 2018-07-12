@@ -24,7 +24,7 @@ class ComputeInstance(object):
         '''
         Fetch state from provider
         '''
-        pass
+        raise NotImplementedError
 
     # Context manager interface
     def __enter__(self):
@@ -35,7 +35,7 @@ class ComputeInstance(object):
 
     # Public interface
     @classmethod
-    def create(cls, template):
+    def create(cls, template, client=None):
         '''
         Create instance on provider
         '''
@@ -48,21 +48,21 @@ class ComputeInstance(object):
         '''
         Stop and delete instance from provider
         '''
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def start(self):
         '''
         Start instance
         '''
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def stop(self):
         '''
         Stop instance
         '''
-        pass
+        raise NotImplementedError
 
     def wait_for_ready(self, timeout=600):
         '''
@@ -90,7 +90,7 @@ class ComputeInstance(object):
         '''
         True if the instance is booted and ready to accept work
         '''
-        pass
+        raise NotImplementedError
 
     @abstractproperty
     def addresses(self):
@@ -99,7 +99,7 @@ class ComputeInstance(object):
         {'public': [],
          'private': []}
         '''
-        pass
+        raise NotImplementedError
 
 
 create_instance = ComputeInstance.create
