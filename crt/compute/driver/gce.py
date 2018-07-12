@@ -25,12 +25,14 @@ class GCEComputeInstance(ComputeInstance):
         self.project = project
         self.zone = zone
 
-        self._gce = googleapiclient.discovery.build('compute', 'v1')
+        self._gce = None
 
     def _refresh_state(self):
         '''
         Fetch state from provider
         '''
+        if self._gce is None:
+            self._gce = googleapiclient.discovery.build('compute', 'v1')
         request = self._gce.instances().get(
             project=self.project,
             zone=self.zone,
@@ -38,6 +40,7 @@ class GCEComputeInstance(ComputeInstance):
             )
         try:
             self._state = request.execute()
+            logger.debug('instances.get response: %s', self._state)
             self._last_refresh = datetime.datetime.now()
         except Exception as exc:
             self._state = None
@@ -45,12 +48,15 @@ class GCEComputeInstance(ComputeInstance):
 
     # Public interface
     @classmethod
-    def create(cls, template):
+    def create(cls, template, client=None):
         '''
         Create instance on provider
         https://cloud.google.com/compute/docs/reference/rest/v1/instances/insert
         '''
-        gce = googleapiclient.discovery.build('compute', 'v1')
+        if client is None:
+            gce = googleapiclient.discovery.build('compute', 'v1')
+        else:
+            gce = client
         body = template.to_camel()['compute']['instance']
         iid = body.get('name')
         project = body.pop('project', None)
@@ -63,7 +69,7 @@ class GCEComputeInstance(ComputeInstance):
             sourceInstanceTemplate=template
         )
         op = request.execute()
-        logger.debug(op)
+        logger.debug('instances.insert response: %s', op)
         return cls(iid, project, zone)
 
     def delete(self):

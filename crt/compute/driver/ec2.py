@@ -30,6 +30,7 @@ class EC2ComputeInstance(ComputeInstance):
         '''
         try:
             response = self._ec2.describe_instances(InstanceIds=[self.id])
+            logger.debug('describe_instances response: %s', response)
             if not len(response.get('Reservations', [])) == 1:
                 logger.warn('Received %d Reservations. Should be exactly one.')
             if not len(response['Reservations'][0]['Instances']) == 1:
@@ -42,15 +43,18 @@ class EC2ComputeInstance(ComputeInstance):
 
     # Public interface
     @classmethod
-    def create(cls, template):
+    def create(cls, template, client=None):
         '''
         Create instance on EC2
         '''
         body = template.to_pascal()['compute']['instance']
         region = body.pop('region')
-        ec2 = boto3.client('ec2', region_name=region)
+        if client is None:
+            ec2 = boto3.client('ec2', region_name=region)
+        else:
+            ec2 = client
         response = ec2.run_instances(**body)
-        logger.debug(response)
+        logger.debug('run_instances response: %s', response)
         iid = response['Instances'][0]['InstanceId']
         return cls(iid, region)
 
