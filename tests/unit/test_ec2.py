@@ -2,7 +2,7 @@ import json
 import pytest
 import boto3
 from botocore.stub import Stubber
-from crt.compute.driver.ec2 import EC2ComputeInstance
+from crt.compute.instance.ec2 import EC2ComputeInstance
 from crt.template import Template
 
 

@@ -28,10 +28,12 @@ class Template(object):
 
         # The native_callbacks dict makes these functions available
         # from within the template.  They are called like this:
-        #    std.native('env')('PATH')
+        #    std.native('getenv')()
+        #    std.native('uuidgen')()
         self.native_callbacks = {
             'uuidgen': ((), self.uuidgen),
             'getenv': ((), self.getenv),
+            'readfile': (('path',), self.readfile),
         }
         self.__dict__ = self._eval()
 
@@ -77,6 +79,14 @@ class Template(object):
         Make environment varibales available in templates.
         '''
         return dict(os.environ)
+
+    @staticmethod
+    def readfile(path):
+        '''
+        Return content of file specified by 'path'
+        '''
+        with open(path, 'r') as f:
+            return f.read()
 
     # Dict interface
     def iteritems(self):

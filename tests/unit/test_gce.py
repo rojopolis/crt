@@ -2,7 +2,7 @@
 import pytest
 from apiclient.discovery import build_from_document
 from apiclient.http import HttpMockSequence
-from crt.compute.driver.gce import GCEComputeInstance
+from crt.compute.instance.gce import GCEComputeInstance
 from crt.template import Template
 
 

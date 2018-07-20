@@ -1,8 +1,9 @@
 local project = 'dev-000001';
 local zone = 'us-central1-b';
-local name = 'pooper';
-local machine_type = 'projects/' + project + '/zones/' + zone + '/machineTypes/f1-micro';
+local name = 'i' + std.native('uuidgen')();
+local machine_type = 'projects/' + project + '/zones/' + zone + '/machineTypes/g1-small';
 local image = 'global/images/family/rancheros';
+local readfile = std.native('readfile');
 {
     compute: {
         provider: 'gce',
@@ -17,12 +18,21 @@ local image = 'global/images/family/rancheros';
             name: name,
             description: name,
             can_ip_forward: false,
+            scheduling: {
+                preemptible: true
+            },
             network_interfaces: [
                 {
-                    network: 'global/networks/default'
+                    network: 'global/networks/default',
+                    access_configs: [
+                        {
+                            type: 'ONE_TO_ONE_NAT',
+                            name: 'External NAT'
+                        },
+                    ],
                 }
             ],
-            disks:[
+            disks: [
                 {
                     initialize_Params: {
                         source_image: image,
@@ -32,10 +42,25 @@ local image = 'global/images/family/rancheros';
                     boot: true,
                     auto_delete: true,
                 }
-            ]
+            ],
+            metadata: {
+                items: [
+                    {
+                        key: 'user-data',
+                        value: readfile('tests/fixtures/cloud-config.yml')
+                    }
+                ],
+            },
         },
-    },
-    container: {
-        provider: 'docker'
+        container: {
+            provider: 'docker',
+            port: 2376,
+            tls_config: {
+                ca_cert: 'tests/functional/ca.pem',
+                client_cert: 'tests/functional/cert.pem',
+                client_key: 'tests/functional/key.pem'
+            },
+            image: 'debian',
+        },
     },
 }
