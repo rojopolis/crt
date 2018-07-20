@@ -26,7 +26,7 @@ class DockerContainer(ComputeContainer):
         self.delete()
 
     @classmethod
-    def create(cls, template, host, client=None):
+    def create(cls, template, host=None, client=None):
         '''
         Create container
         '''
