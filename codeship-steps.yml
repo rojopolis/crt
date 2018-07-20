@@ -12,6 +12,7 @@
     command: /bin/bash -c 'pip install -r requirements-test.txt -e .; pytest --cov=crt'
 - service: python2.7
   name: Coverage Report
+  tag: master
   command: /bin/bash -c 'pip install -r requirements-test.txt -e .; codecov'
   
 - service: python2.7
