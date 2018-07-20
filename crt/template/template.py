@@ -33,7 +33,7 @@ class Template(object):
         self.native_callbacks = {
             'uuidgen': ((), self.uuidgen),
             'getenv': ((), self.getenv),
-            'readfile': ((path,), self.readfile)
+            'readfile': (('path',), self.readfile),
         }
         self.__dict__ = self._eval()
 
