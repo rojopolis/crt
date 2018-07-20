@@ -2,3 +2,5 @@ ipython
 flake8
 pylint
 versioneer
+sphinx
+sphinx-autobuild
